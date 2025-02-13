@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -32,7 +33,12 @@ public class CourseDTO {
     @NotNull
     private UUID userInstructor;
 
+    @NotNull
+    private LocalDateTime creationDate;
+
+    @NotNull
     private CourseLevel courseLevel;
+
 
     public CourseDTO(CourseModel courseModel) {
         this.id = courseModel.getId();
@@ -41,6 +47,7 @@ public class CourseDTO {
         this.imageUrl = courseModel.getImageUrl();
         this.courseStatus = courseModel.getCourseStatus();
         this.userInstructor = courseModel.getUserInstructor();
+        this.creationDate = courseModel.getCreationDate();
         this.courseLevel = courseModel.getCourseLevel();
     }
 

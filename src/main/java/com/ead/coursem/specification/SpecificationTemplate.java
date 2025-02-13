@@ -19,6 +19,7 @@ public class SpecificationTemplate {
     public interface CourseSpec extends Specification<CourseModel> {
     }
 
+
 }
 
 

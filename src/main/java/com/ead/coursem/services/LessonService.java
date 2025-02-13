@@ -1,13 +1,14 @@
 package com.ead.coursem.services;
 
 import com.ead.coursem.dto.LessonsDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface LessonService {
 
-    List<LessonsDTO> findAllLessons(UUID moduleId);
+    Page<LessonsDTO> findAllLessons(UUID moduleId, String title, Pageable pageable);
 
     LessonsDTO save(UUID moduleId, LessonsDTO lessonsDTO);
 

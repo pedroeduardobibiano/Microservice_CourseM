@@ -3,12 +3,15 @@ package com.ead.coursem.controllers;
 import com.ead.coursem.dto.ModuleDTO;
 import com.ead.coursem.services.ModuleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,8 +22,10 @@ public class ModuleController {
     private final ModuleService moduleService;
 
     @GetMapping("/courses/{id}/modules")
-    public ResponseEntity<List<ModuleDTO>> findAllModules(@PathVariable UUID id) {
-        List<ModuleDTO> moduleDTO = moduleService.findAll(id);
+    public ResponseEntity<Page<ModuleDTO>> findAllModules(@PathVariable(value = "id") UUID id,
+                                                          @RequestParam(value = "title", defaultValue = "") String title,
+                                                          @PageableDefault(sort = "module_id", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<ModuleDTO> moduleDTO = moduleService.findAll(id, title.trim(), pageable);
         return new ResponseEntity<>(moduleDTO, HttpStatus.OK);
     }
 

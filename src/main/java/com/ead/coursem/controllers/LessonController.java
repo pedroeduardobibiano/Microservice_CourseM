@@ -3,11 +3,13 @@ package com.ead.coursem.controllers;
 import com.ead.coursem.dto.LessonsDTO;
 import com.ead.coursem.services.LessonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,8 +21,10 @@ public class LessonController {
 
 
     @GetMapping("modules/{modulesId}/lessons")
-    public ResponseEntity<List<LessonsDTO>> findAllLessons(@PathVariable(value = "modulesId") UUID id) {
-        List<LessonsDTO> lessons = lessonService.findAllLessons(id);
+    public ResponseEntity<Page<LessonsDTO>> findAllLessons(@PathVariable(value = "modulesId") UUID id,
+                                                           @RequestParam(value = "title", defaultValue = "") String title,
+                                                           @PageableDefault(sort = "lesson_id") Pageable pageable) {
+        Page<LessonsDTO> lessons = lessonService.findAllLessons(id, title.trim(), pageable);
         return new ResponseEntity<>(lessons, HttpStatus.OK);
     }
 

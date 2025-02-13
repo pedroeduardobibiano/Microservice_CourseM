@@ -8,16 +8,16 @@ import com.ead.coursem.repositories.ModuleRepository;
 import com.ead.coursem.services.LessonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +29,10 @@ public class LessonServiceImpl implements LessonService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<LessonsDTO> findAllLessons(UUID moduleId) {
+    public Page<LessonsDTO> findAllLessons(UUID moduleId, String title, Pageable pageable) {
         getModuleModel(moduleId);
-        List<LessonModel> models = lessonRepository.findAllLessonsIntoModule(moduleId);
-        return models.stream().map(LessonsDTO::new).collect(Collectors.toList());
+        Page<LessonModel> models = lessonRepository.findAllLessonsIntoModulePaged(moduleId, title, pageable);
+        return models.map(LessonsDTO::new);
     }
 
     @Transactional(readOnly = true)
