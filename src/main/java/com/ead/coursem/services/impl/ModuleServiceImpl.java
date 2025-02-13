@@ -58,6 +58,7 @@ public class ModuleServiceImpl implements ModuleService {
         return new ModuleDTO(module);
     }
 
+    @Transactional
     @Override
     public void delete(UUID id, UUID moduleId) {
         ModuleModel moduleModel = getModuleId(moduleId);

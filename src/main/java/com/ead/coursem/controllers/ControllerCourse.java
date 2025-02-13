@@ -2,7 +2,12 @@ package com.ead.coursem.controllers;
 
 import com.ead.coursem.dto.CourseDTO;
 import com.ead.coursem.services.CourseService;
+import com.ead.coursem.specification.SpecificationTemplate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +25,9 @@ public class ControllerCourse {
     private final CourseService courseService;
 
     @GetMapping
-    public ResponseEntity<List<CourseDTO>> getAllCourses() {
-        List<CourseDTO> courseDTO = courseService.findAll();
+    public ResponseEntity<Page<CourseDTO>> getAllCourses(SpecificationTemplate.CourseSpec spec,
+                                                         @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+        Page<CourseDTO> courseDTO = courseService.findAll(spec, pageable);
         return new ResponseEntity<>(courseDTO, HttpStatus.OK);
     }
 

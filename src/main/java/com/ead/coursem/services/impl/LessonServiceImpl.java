@@ -9,6 +9,7 @@ import com.ead.coursem.services.LessonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class LessonServiceImpl implements LessonService {
     private final ModuleRepository moduleRepository;
 
 
+    @Transactional(readOnly = true)
     @Override
     public List<LessonsDTO> findAllLessons(UUID moduleId) {
         getModuleModel(moduleId);
@@ -33,7 +35,7 @@ public class LessonServiceImpl implements LessonService {
         return models.stream().map(LessonsDTO::new).collect(Collectors.toList());
     }
 
-
+    @Transactional(readOnly = true)
     @Override
     public LessonsDTO findById(UUID moduleId, UUID lessonId) {
         try {
@@ -45,6 +47,7 @@ public class LessonServiceImpl implements LessonService {
     }
 
 
+    @Transactional
     @Override
     public LessonsDTO save(UUID moduleId, LessonsDTO lessonsDTO) {
         ModuleModel getModule = getModuleModel(moduleId);
@@ -58,6 +61,7 @@ public class LessonServiceImpl implements LessonService {
         return new LessonsDTO(lessonModel);
     }
 
+    @Transactional
     @Override
     public LessonsDTO update(UUID moduleId, UUID lessonId, LessonsDTO lessonsDTO) {
         try {
@@ -72,6 +76,7 @@ public class LessonServiceImpl implements LessonService {
         }
     }
 
+    @Transactional
     @Override
     public void delete(UUID moduleId, UUID lessonId) {
         LessonModel getLessonModel = lessonRepository.findLessonsById(moduleId, lessonId);

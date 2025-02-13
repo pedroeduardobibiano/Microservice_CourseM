@@ -10,6 +10,9 @@ import com.ead.coursem.repositories.ModuleRepository;
 import com.ead.coursem.services.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +22,6 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +31,12 @@ public class CourseServiceImpl implements CourseService {
     private final ModuleRepository moduleRepository;
     private final LessonRepository lessonRepository;
 
-    @Transactional(readOnly = true)
+
     @Override
-    public List<CourseDTO> findAll() {
-        List<CourseModel> courses = courseRepository.findAll();
-        return courses.stream().map(CourseDTO::new).collect(Collectors.toList());
+    public Page<CourseDTO> findAll(Specification<CourseModel> spec, Pageable pageable) {
+        Page<CourseModel> courses = courseRepository.findAll(spec, pageable);
+        return courses.map(CourseDTO::new);
+
     }
 
     @Transactional(readOnly = true)
